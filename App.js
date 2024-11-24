@@ -344,6 +344,4 @@ const darkTheme = {
   convertButtonText: {color: '#f0cd09'},
   AmountContainer: {backgroundColor: '#e0e0de'},
   ConvertAmountContainer: {backgroundColor: '#403f3d',borderColor: '#e0e0de'},
-
-
 };
