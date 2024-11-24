@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Keyboard,
-  Platform,
-  ImageBackground,
-  Switch,
-} from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Keyboard, Platform, ImageBackground, Switch, } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import axios from 'axios'; // Import Axios
-import lightBackgroundImage from './assets/light mode.png'; // Replace with your light background
-import darkBackgroundImage from './assets/dark mode.png'; // Replace with your dark background
+import axios from 'axios';
+import lightBackgroundImage from './assets/light mode.png';
+import darkBackgroundImage from './assets/dark mode.png';
 
 
-const FIXER_API_KEY = '4473563b59db3a6f87bc9e32386f968b'; // Replace with your Fixer.io API Key
+const FIXER_API_KEY = '4473563b59db3a6f87bc9e32386f968b'; // Replace with Fixer.io API Key
 const FIXER_API_URL = `http://data.fixer.io/api/latest?access_key=${FIXER_API_KEY}`;
 
 
@@ -33,13 +22,12 @@ export default function CurrencyConverter() {
 
 
   useEffect(() => {
-    // Fetch exchange rates from Fixer.io
     const fetchRates = async () => {
       try {
         const response = await axios.get(FIXER_API_URL);
         if (response.data.success) {
           setRates(response.data.rates);
-          setErrorMessage(''); // Clear any previous error
+          setErrorMessage('');
         } else {
           setErrorMessage('Error fetching rates from Fixer.io');
         }
@@ -58,7 +46,7 @@ export default function CurrencyConverter() {
       if (rates[baseCurrency] && rates[targetCurrency]) {
         const rate = rates[targetCurrency] / rates[baseCurrency];
         setConvertedAmount((amount * rate).toFixed(2));
-        setErrorMessage(''); // Clear any previous error
+        setErrorMessage('');
       } else {
         setErrorMessage('Currency rates not available.');
         setConvertedAmount(null);
@@ -113,7 +101,6 @@ export default function CurrencyConverter() {
         />
       </View>
 
-
       <KeyboardAvoidingView
         style={[styles.container, themeStyles.container]}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -141,11 +128,9 @@ export default function CurrencyConverter() {
               </Picker>
             </View>
 
-
             <TouchableOpacity onPress={swapCurrencies} style={[styles.swapButton, themeStyles.swapButton]}>
               <Text style={[styles.swapButtonText, themeStyles.swapButtonText]}>⇆</Text>
             </TouchableOpacity>
-
 
             <View style={[styles.inlineContainer, themeStyles.inlineContainer, { marginLeft: 5 }]}>
               <Text style={[styles.label, themeStyles.label]}>Target Currency</Text>
@@ -161,7 +146,6 @@ export default function CurrencyConverter() {
             </View>
           </View>
 
-
           <View style={[styles.AmountContainer, themeStyles.AmountContainer]}>
             <Text style={[styles.label, themeStyles.label]}>Enter Amount ({baseCurrency})</Text>
             <TextInput
@@ -173,11 +157,9 @@ export default function CurrencyConverter() {
             />
           </View>
 
-
           <TouchableOpacity onPress={convertCurrency} style={[styles.convertButton, themeStyles.convertButton]}>
             <Text style={[styles.convertButtonText, themeStyles.convertButtonText]}>Convert</Text>
           </TouchableOpacity>
-
 
           <View style={[styles.ConvertAmountContainer, themeStyles.ConvertAmountContainer]}>
             <Text style={[styles.AmountText, themeStyles.AmountText]}>
@@ -193,7 +175,6 @@ export default function CurrencyConverter() {
               editable={false}
             />
           </View>
-
 
           {errorMessage ? (
             <Text style={styles.errorText}>{errorMessage}</Text>
@@ -287,7 +268,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     borderRadius: 10,
-    //alignItems: 'center',
   },
   picker: {
     width: '100%',
@@ -323,8 +303,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 15,
     width: '100%',
-
-
   },
   ConvertAmountContainer: {
     padding: 10,
@@ -333,51 +311,39 @@ const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 2,
   },
- 
+
 });
-
-
-
 
 const lightTheme = {
   title: { color: '#1c1b18' },
-  midcontainer: {backgroundColor: '#f2e7b6'},
-  label: {color:"#d6d5d2"},
-  AmountText:{ color:"#1c1b18"},
-  input: {borderColor: '#ccc',backgroundColor: '#d1cebe'},
-  ConvertedAmount: {borderColor: '#ccc',backgroundColor: '#403f3d',color:"#fffefa"},
-  inlineContainer: {backgroundColor: '#403f3d'},
-  picker: {backgroundColor: '#d1cebe',color:"#1c1b18" },
-  swapButton: {backgroundColor: '#f0cd09',borderColor: '#1c1b18'},
-  swapButtonText: {color: '#1c1b18'},
-  convertButton: {backgroundColor: '#f0cd09',borderColor: '#1c1b18'},
-  convertButtonText: {color: '#1c1b18'},
-  AmountContainer: {backgroundColor: '#403f3d'},
-  ConvertAmountContainer: {backgroundColor: '#d1cebe',borderColor: '#1c1b18'},
-
-
+  midcontainer: { backgroundColor: '#f2e7b6' },
+  label: { color: "#d6d5d2" },
+  AmountText: { color: "#1c1b18" },
+  input: { borderColor: '#ccc', backgroundColor: '#d1cebe' },
+  ConvertedAmount: { borderColor: '#ccc', backgroundColor: '#403f3d', color: "#fffefa" },
+  inlineContainer: { backgroundColor: '#403f3d' },
+  picker: { backgroundColor: '#d1cebe', color: "#1c1b18" },
+  swapButton: { backgroundColor: '#f0cd09', borderColor: '#1c1b18' },
+  swapButtonText: { color: '#1c1b18' },
+  convertButton: { backgroundColor: '#f0cd09', borderColor: '#1c1b18' },
+  convertButtonText: { color: '#1c1b18' },
+  AmountContainer: { backgroundColor: '#403f3d' },
+  ConvertAmountContainer: { backgroundColor: '#d1cebe', borderColor: '#1c1b18' },
 };
-
-
-
-
-
 
 const darkTheme = {
   title: { color: '#f0cd09' },
-  midcontainer: {backgroundColor: '#595957'},
-  label: {color:"#1c1b18"},
-  AmountText:{ color:"#d6d5d2"},
-  input: {borderColor: '#ccc',backgroundColor: '#8c8c8b',color:"#f2f2f0"},
-  ConvertedAmount: {borderColor: '#ccc',backgroundColor: '#e0e0de',color:"#1c1b18"},
-  inlineContainer: {backgroundColor: '#e0e0de'},
-  picker: {backgroundColor: '#8c8c8b',color:"#f2f2f0" },
-  swapButton: {backgroundColor: '#1c1b18',borderColor: '#f0cd09'},
-  swapButtonText: {color: '#f0cd09'},
-  convertButton: {backgroundColor: '#1c1b18',borderColor: '#f0cd09'},
-  convertButtonText: {color: '#f0cd09'},
-  AmountContainer: {backgroundColor: '#e0e0de'},
-  ConvertAmountContainer: {backgroundColor: '#403f3d',borderColor: '#e0e0de'},
-
-
+  midcontainer: { backgroundColor: '#595957' },
+  label: { color: "#1c1b18" },
+  AmountText: { color: "#d6d5d2" },
+  input: { borderColor: '#ccc', backgroundColor: '#8c8c8b', color: "#f2f2f0" },
+  ConvertedAmount: { borderColor: '#ccc', backgroundColor: '#e0e0de', color: "#1c1b18" },
+  inlineContainer: { backgroundColor: '#e0e0de' },
+  picker: { backgroundColor: '#8c8c8b', color: "#f2f2f0" },
+  swapButton: { backgroundColor: '#1c1b18', borderColor: '#f0cd09' },
+  swapButtonText: { color: '#f0cd09' },
+  convertButton: { backgroundColor: '#1c1b18', borderColor: '#f0cd09' },
+  convertButtonText: { color: '#f0cd09' },
+  AmountContainer: { backgroundColor: '#e0e0de' },
+  ConvertAmountContainer: { backgroundColor: '#403f3d', borderColor: '#e0e0de' },
 };
