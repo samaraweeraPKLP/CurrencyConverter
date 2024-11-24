@@ -130,7 +130,7 @@ export default function CurrencyConverter() {
         <Text style={styles.AmountText}>Converted Amount ({targetCurrency})</Text>
         <TextInput
           style={styles.ConvertedAmount}
-          value={`Converted Amount: ${
+          value={`${
             convertedAmount !== null && convertedAmount !== 'Invalid Input'
               ? `${convertedAmount} ${targetCurrency}`
               : convertedAmount
