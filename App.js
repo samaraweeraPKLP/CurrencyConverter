@@ -8,9 +8,10 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  ImageBackground,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
+import backgroundImage from './assets/light mode.png'; // Import your image
 export default function CurrencyConverter() {
   const [amount, setAmount] = useState('');
   const [baseCurrency, setBaseCurrency] = useState('USD');
@@ -56,10 +57,12 @@ export default function CurrencyConverter() {
   }, []);
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <ImageBackground source={backgroundImage} style={styles.background} resizeMode="cover">
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={100}
+      >
       <Text style={styles.title}>Currency Converter</Text>
       <View
         style={[
@@ -69,7 +72,8 @@ export default function CurrencyConverter() {
       >
         {/* Row for Currency Selection and Swap Button */}
         <View style={styles.row}>
-          <View style={styles.pickerContainer}>
+          {/* Base Currency Container */}
+          <View style={[styles.inlineContainer, { marginRight: 5 }]}>
             <Text style={styles.label}>Base Currency</Text>
             <Picker
               selectedValue={baseCurrency}
@@ -88,7 +92,8 @@ export default function CurrencyConverter() {
             <Text style={styles.swapButtonText}>⇆</Text>
           </TouchableOpacity>
 
-          <View style={styles.pickerContainer}>
+          {/* Target Currency Container */}
+          <View style={[styles.inlineContainer, { marginLeft: 5 }]}>
             <Text style={styles.label}>Target Currency</Text>
             <Picker
               selectedValue={targetCurrency}
@@ -103,15 +108,17 @@ export default function CurrencyConverter() {
           </View>
         </View>
 
-        {/* Enter Amount Field */}
-        <Text style={styles.label}>Enter Amount ({baseCurrency})</Text>
-        <TextInput
-          style={styles.input}
-          placeholder={`Enter amount in ${baseCurrency}`}
-          keyboardType="numeric"
-          value={amount}
-          onChangeText={setAmount}
-        />
+        {/* Enter Amount Container */}
+        <View style={styles.AmountContainer}>
+          <Text style={styles.label}>Enter Amount ({baseCurrency})</Text>
+          <TextInput
+            style={styles.input}
+            placeholder={`Enter amount in ${baseCurrency}`}
+            keyboardType="numeric"
+            value={amount}
+            onChangeText={setAmount}
+          />
+        </View>
 
         {/* Convert Button */}
         <TouchableOpacity onPress={convertCurrency} style={styles.convertButton}>
@@ -119,9 +126,10 @@ export default function CurrencyConverter() {
         </TouchableOpacity>
 
         {/* Converted Amount Field */}
-        <Text style={styles.label}>Converted Amount ({targetCurrency})</Text>
+        <View style={styles.ConvertAmountContainer}>
+        <Text style={styles.AmountText}>Converted Amount ({targetCurrency})</Text>
         <TextInput
-          style={styles.input}
+          style={styles.ConvertedAmount}
           value={`Converted Amount: ${
             convertedAmount !== null && convertedAmount !== 'Invalid Input'
               ? `${convertedAmount} ${targetCurrency}`
@@ -129,35 +137,50 @@ export default function CurrencyConverter() {
           }`}
           editable={false}
         />
+        </View>
       </View>
     </KeyboardAvoidingView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: 10,
+    marginTop: '15%',
   },
   midcontainer: {
-    backgroundColor: '#79a9b5',
-    padding: 20,
+    backgroundColor: '#f2e7b6',
+    padding: 10,
     borderRadius: 10,
-    width: '90%',
+    width: '95%',
   },
   title: {
-    fontSize: 26,
+    fontSize: 35,
     fontWeight: 'bold',
-    marginBottom: 30,
+    marginBottom: 20,
+
   },
   label: {
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight:"500",
     marginBottom: 5,
     marginTop: 10,
-    marginHorizontal: 10,
+    paddingLeft: 5,
+    color:"#ededeb",
+  },
+  AmountText: {
+    fontSize: 20,
+    fontWeight:"500",
+    marginBottom: 5,
+    marginTop: 10,
+    paddingLeft: 5,
+    color:"#1c1b18",
   },
   input: {
     height: 40,
@@ -165,8 +188,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 15,
-    marginHorizontal: 15,
-    paddingLeft: 10,
+    paddingLeft: 5,
+    backgroundColor: '#d1cebe',
+    color:"#fffefa",
+    fontSize: 17,
+  },
+  ConvertedAmount: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 15,
+    paddingLeft: 5,
+    backgroundColor: '#4f4a35',
+    color:"#fffefa",
+    fontSize: 17,
+
   },
   row: {
     flexDirection: 'row',
@@ -175,39 +212,65 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 15,
   },
-  pickerContainer: {
+  inlineContainer: {
     flex: 1,
-    alignItems: 'center',
+    backgroundColor: '#4f4a35',
+    padding: 10,
+    borderRadius: 10,
+    //alignItems: 'center',
   },
   picker: {
-    width: '90%',
+    width: '100%',
+    backgroundColor: '#d1cebe',
+    color:"#1c1b18",
+    fontSize: 17,
   },
   swapButton: {
     padding: 10,
-    backgroundColor: '#007BFF',
-    borderRadius: 5,
-    marginHorizontal: 10,
+    backgroundColor: '#f0cd09',
+    borderRadius: "30%",
     justifyContent: 'center',
     alignItems: 'center',
+    borderColor: '#1c1b18',
+    borderWidth: 2, 
   },
   swapButtonText: {
-    fontSize: 20,
-    color: '#fff',
+    fontSize: 30,
+    color: '#1c1b18',
     fontWeight: 'bold',
   },
   convertButton: {
     marginTop: 20,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#f0cd09',
     width: '50%',
     paddingVertical: 10,
     borderRadius: 5,
     marginBottom: 15,
     alignSelf: 'center',
+    borderColor: '#1c1b18',
+    borderWidth: 2, 
   },
   convertButtonText: {
-    color: '#fff',
+    color: '#1c1b18',
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  AmountContainer: {
+    backgroundColor: '#4f4a35',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+    width: '100%',
+
+  },
+  ConvertAmountContainer: {
+    backgroundColor: '#d1cebe',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+    width: '100%',
+    borderColor: '#1c1b18',
+    borderWidth: 2, 
   },
 });
