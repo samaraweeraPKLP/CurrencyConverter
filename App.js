@@ -9,15 +9,21 @@ import {
   Keyboard,
   Platform,
   ImageBackground,
+  Switch,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import backgroundImage from './assets/light mode.png'; // Import your image
+import lightBackgroundImage from './assets/light mode.png'; // Import your light background image
+import darkBackgroundImage from './assets/dark mode.png'; // Import your dark background image
+
+
 export default function CurrencyConverter() {
   const [amount, setAmount] = useState('');
   const [baseCurrency, setBaseCurrency] = useState('USD');
   const [targetCurrency, setTargetCurrency] = useState('EUR');
   const [convertedAmount, setConvertedAmount] = useState(null);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false); // New state to track dark mode
+
 
   // Hardcoded exchange rates (example, replace with API data if needed)
   const rates = {
@@ -26,6 +32,7 @@ export default function CurrencyConverter() {
     GBP: { USD: 1.33, EUR: 1.14, INR: 100 },
     INR: { USD: 0.013, EUR: 0.011, GBP: 0.01 },
   };
+
 
   const convertCurrency = () => {
     if (amount && !isNaN(amount)) {
@@ -36,10 +43,12 @@ export default function CurrencyConverter() {
     }
   };
 
+
   const swapCurrencies = () => {
     setBaseCurrency(targetCurrency);
     setTargetCurrency(baseCurrency);
   };
+
 
   // Track keyboard visibility
   useEffect(() => {
@@ -50,14 +59,34 @@ export default function CurrencyConverter() {
       setKeyboardVisible(false);
     });
 
+
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
   }, []);
 
+
   return (
-    <ImageBackground source={backgroundImage} style={styles.background} resizeMode="cover">
+    <ImageBackground
+      source={isDarkMode ? darkBackgroundImage : lightBackgroundImage} // Change background based on mode
+      style={styles.background}
+      resizeMode="cover"
+    >
+      {/* Dark Mode Switch */}
+      <View style={styles.darkModeContainer}>
+      <Text style={[styles.darkModeText, { color: isDarkMode ? '#fff' : '#000' }]}>
+    {isDarkMode ? 'Dark Mode' : 'Light Mode'}
+  </Text>
+        <Switch
+          value={isDarkMode}
+          onValueChange={() => setIsDarkMode(!isDarkMode)}
+          trackColor={{ false: '#767577', true: '#81b0ff' }}
+          thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
+        />
+      </View>
+
+
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -87,10 +116,12 @@ export default function CurrencyConverter() {
             </Picker>
           </View>
 
+
           {/* Swap Button */}
           <TouchableOpacity onPress={swapCurrencies} style={styles.swapButton}>
             <Text style={styles.swapButtonText}>⇆</Text>
           </TouchableOpacity>
+
 
           {/* Target Currency Container */}
           <View style={[styles.inlineContainer, { marginLeft: 5 }]}>
@@ -108,6 +139,7 @@ export default function CurrencyConverter() {
           </View>
         </View>
 
+
         {/* Enter Amount Container */}
         <View style={styles.AmountContainer}>
           <Text style={styles.label}>Enter Amount ({baseCurrency})</Text>
@@ -120,10 +152,12 @@ export default function CurrencyConverter() {
           />
         </View>
 
+
         {/* Convert Button */}
         <TouchableOpacity onPress={convertCurrency} style={styles.convertButton}>
           <Text style={styles.convertButtonText}>Convert</Text>
         </TouchableOpacity>
+
 
         {/* Converted Amount Field */}
         <View style={styles.ConvertAmountContainer}>
@@ -144,6 +178,7 @@ export default function CurrencyConverter() {
   );
 }
 
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -152,7 +187,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 10,
-    marginTop: '15%',
+  },
+  darkModeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 35,
+    marginLeft: "65%",
+  },
+  darkModeText: {
+    fontSize: 18,
+    color: '#fff',
+    marginRight: 10,
   },
   midcontainer: {
     backgroundColor: '#f2e7b6',
@@ -164,6 +209,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: 'bold',
     marginBottom: 20,
+
 
   },
   label: {
@@ -190,7 +236,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingLeft: 5,
     backgroundColor: '#d1cebe',
-    color:"#fffefa",
+    color:"#1c1b18",
     fontSize: 17,
   },
   ConvertedAmount: {
@@ -203,6 +249,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4f4a35',
     color:"#fffefa",
     fontSize: 17,
+
 
   },
   row: {
@@ -232,7 +279,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#1c1b18',
-    borderWidth: 2, 
+    borderWidth: 2,
   },
   swapButtonText: {
     fontSize: 30,
@@ -248,7 +295,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     alignSelf: 'center',
     borderColor: '#1c1b18',
-    borderWidth: 2, 
+    borderWidth: 2,
   },
   convertButtonText: {
     color: '#1c1b18',
@@ -263,6 +310,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: '100%',
 
+
   },
   ConvertAmountContainer: {
     backgroundColor: '#d1cebe',
@@ -271,6 +319,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: '100%',
     borderColor: '#1c1b18',
-    borderWidth: 2, 
+    borderWidth: 2,
   },
 });
+
+
